@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 public class Product {
 
     @jakarta.persistence.Id
