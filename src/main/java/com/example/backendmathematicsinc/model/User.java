@@ -1,5 +1,6 @@
 package com.example.backendmathematicsinc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,10 +15,10 @@ import java.util.List;
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
+    @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Getter
     @Setter
     @Column(unique = true)
     private String username;
@@ -29,6 +30,10 @@ public class User implements UserDetails {
     @Setter
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Cart cart;
 
 
     @Override
