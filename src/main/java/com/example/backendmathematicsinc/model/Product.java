@@ -21,8 +21,10 @@ public class Product {
     @NotBlank(message = "Name is mandatory")
     private String name;
 
-    @NotBlank(message = "Name is mandatory")
+    @NotBlank(message = "An image url is mandatory")
     private String imageUrl;
+
+    private double price;
 
     private String description;
 
