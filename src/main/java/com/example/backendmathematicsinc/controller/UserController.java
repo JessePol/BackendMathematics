@@ -1,6 +1,6 @@
 package com.example.backendmathematicsinc.controller;
 
-import com.example.backendmathematicsinc.dto.UpdateRoleRequestDTO;
+import com.example.backendmathematicsinc.dto.request.UpdateRoleRequest;
 import com.example.backendmathematicsinc.dto.UserResponseDTO;
 import com.example.backendmathematicsinc.model.User;
 import com.example.backendmathematicsinc.service.UserService;
@@ -49,7 +49,7 @@ public class UserController {
 
     @PutMapping("/{user_id}/role")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserResponseDTO> updateUserRole(@PathVariable Long user_id, @RequestBody UpdateRoleRequestDTO request) {
+    public ResponseEntity<UserResponseDTO> updateUserRole(@PathVariable Long user_id, @RequestBody UpdateRoleRequest request) {
         User updatedUser = userService.updateUserRole(user_id, request.role());
         return ResponseEntity.ok(UserResponseDTO.fromEntity(updatedUser));
     }
