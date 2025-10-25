@@ -34,4 +34,12 @@ public class CartItem {
         this.product = product;
         this.quantity = quantity;
     }
+
+    @Transient
+    public double getItemTotal() {
+        if (getProduct() != null) {
+            return getProduct().getPrice() * getQuantity();
+        }
+        return 0.0;
+    }
 }

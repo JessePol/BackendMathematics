@@ -4,7 +4,9 @@ import com.example.backendmathematicsinc.model.CartItem;
 public record CartItemResponseDTO(
         Long productId,
         String productName,
-        int quantity
+        int quantity,
+        double unitPrice,
+        double ItemTotal
 ) {
     public static CartItemResponseDTO fromEntity(CartItem cartItem) {
         if (cartItem == null || cartItem.getProduct() == null) {
@@ -14,7 +16,9 @@ public record CartItemResponseDTO(
         return new CartItemResponseDTO(
                 cartItem.getProduct().getId(),
                 cartItem.getProduct().getName(),
-                cartItem.getQuantity()
+                cartItem.getQuantity(),
+                cartItem.getProduct().getPrice(),
+                cartItem.getItemTotal()
         );
     }
 }

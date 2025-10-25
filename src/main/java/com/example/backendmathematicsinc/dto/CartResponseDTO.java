@@ -8,7 +8,8 @@ import java.util.stream.Collectors;
 
 public record CartResponseDTO(
         Long id,
-        Set<CartItemResponseDTO> items
+        Set<CartItemResponseDTO> items,
+        double totalPrice
 ) {
     public static CartResponseDTO fromEntity(Cart cart) {
         if (cart == null) {
@@ -20,6 +21,6 @@ public record CartResponseDTO(
                         .map(CartItemResponseDTO::fromEntity)
                         .collect(Collectors.toSet());
 
-        return new CartResponseDTO(cart.getId(), itemsDTO);
+        return new CartResponseDTO(cart.getId(), itemsDTO, cart.getTotalPrice());
     }
 }
