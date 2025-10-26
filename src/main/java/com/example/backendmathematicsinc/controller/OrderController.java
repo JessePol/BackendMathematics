@@ -27,7 +27,7 @@ public class OrderController {
         this.userService = userService;
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<OrderResponseDTO> createMyOrder() {
         User currentUser = userService.getCurrentUser();
         Order newOrder = orderService.createOrderFromCart(currentUser.getId());
