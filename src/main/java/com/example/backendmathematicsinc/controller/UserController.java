@@ -50,7 +50,7 @@ public class UserController {
     @PutMapping("/{user_id}/role")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDTO> updateUserRole(@PathVariable Long user_id, @RequestBody UpdateRoleRequest request) {
-        User updatedUser = userService.updateUserRole(user_id, request.role());
+        User updatedUser = userService.updateUserRole(user_id, request.userRole());
         return ResponseEntity.ok(UserResponseDTO.fromEntity(updatedUser));
     }
 
