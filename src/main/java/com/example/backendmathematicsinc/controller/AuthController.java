@@ -1,14 +1,17 @@
 package com.example.backendmathematicsinc.controller;
 
+import com.example.backendmathematicsinc.dto.LoginResponseDTO;
+import com.example.backendmathematicsinc.dto.UserResponseDTO;
+import com.example.backendmathematicsinc.dto.request.AuthenticationRequest;
 import com.example.backendmathematicsinc.model.User;
 import com.example.backendmathematicsinc.model.UserRole;
 import com.example.backendmathematicsinc.repository.UserRepository;
 import com.example.backendmathematicsinc.util.JWTUtils;
-import lombok.Getter;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,30 +38,30 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody AuthenticationRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        authRequest.getUsername(),
-                        authRequest.getPassword()
+                        authRequest.username(),
+                        authRequest.password()
                 )
         );
-        return jwtUtils.generateToken((UserDetails) authentication.getPrincipal());
+        User authenticatedUser = (User) authentication.getPrincipal();
+        String token = jwtUtils.generateToken(authenticatedUser);
+        LoginResponseDTO response = LoginResponseDTO.fromEntityAndToken(authenticatedUser, token);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody AuthenticationRequest authRequest) {
         User newUser = new User();
-        newUser.setUsername(authRequest.getUsername());
-        newUser.setPassword(passwordEncoder.encode(authRequest.getPassword()));
+        newUser.setUsername(authRequest.username());
+        newUser.setPassword(passwordEncoder.encode(authRequest.password()));
         newUser.setRole(UserRole.ROLE_USER);
         userRepository.save(newUser);
-        return "User registered successfully";
-    }
 
-    @Getter
-    public static class AuthRequest {
-        private String username;
-        private String password;
-
+        return ResponseEntity
+                .status(201)
+                .body(UserResponseDTO.fromEntity(newUser));
     }
 }
