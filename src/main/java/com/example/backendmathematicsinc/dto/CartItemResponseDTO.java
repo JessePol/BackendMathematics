@@ -6,7 +6,7 @@ public record CartItemResponseDTO(
         String productName,
         int quantity,
         double unitPrice,
-        double ItemTotal
+        double itemTotal
 ) {
     public static CartItemResponseDTO fromEntity(CartItem cartItem) {
         if (cartItem == null || cartItem.getProduct() == null) {
